@@ -8,8 +8,14 @@ import (
 	"time"
 )
 
+var fakeMetrics = map[int]string{
+	1: "a",
+	2: "b",
+	3: "c",
+}
+
 func main() {
-	conn, err := net.Dial("udp", "127.0.0.1:9125")
+	conn, err := net.Dial("udp", "monit_statsd_exp_1:9125")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -18,14 +24,16 @@ func main() {
 	min := 10
 	max := 30
 
-	for i := 0; i < 10000; i++ {
+	log.Println("starting statsd example app")
+	for {
 		num := rand.Intn(max-min+1) + min
-		msgS := fmt.Sprintf("duplicate_message.a.b.c:%d|c", num)
+		tagA := fakeMetrics[rand.Intn(3-1+1)+1]
+		msgS := fmt.Sprintf("duplicate_message.%s.b.c:%d|c", tagA, num)
 		msg := []byte(msgS)
 
 		_, err = conn.Write(msg)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		time.Sleep(time.Second)
 	}

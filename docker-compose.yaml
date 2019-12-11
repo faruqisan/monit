@@ -4,6 +4,10 @@ services:
     build: ./example-app
     ports:
     - "2112:2112"
+  example_statsd_app:
+    build: ./example_statsd_app
+    depends_on: 
+      - statsd_exp
   prometheus:
     image: prom/prometheus
     ports:
