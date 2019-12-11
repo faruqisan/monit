@@ -1,0 +1,8 @@
+mappings:
+  - match: "duplicate_message.*.*.*"
+    name: "duplicate_message_count"
+    labels:
+      group_id: "$1"
+      topic: "$2"
+      partition: "$3"
+      job: "duplicate_message"

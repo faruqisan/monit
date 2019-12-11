@@ -1,0 +1,28 @@
+version: '3'
+services:
+  example_go:
+    build: ./example-app
+    ports:
+    - "2112:2112"
+  prometheus:
+    image: prom/prometheus
+    ports:
+    - "9090:9090"
+    volumes: 
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:    
+    image: grafana/grafana
+    ports:
+    - "3000:3000"
+    volumes:
+    - ./grafana-persist:/var/lib/grafana
+  statsd_exp:
+    image: prom/statsd-exporter
+    command: "--statsd.mapping-config=/tmp/statsd_mapping.yml"
+    ports: 
+    - "9102:9102"
+    - "9125:9125/udp"
+    volumes:
+    - ./statsd_exporter/statsd_mapping.yml:/tmp/statsd_mapping.yml
+
+  
